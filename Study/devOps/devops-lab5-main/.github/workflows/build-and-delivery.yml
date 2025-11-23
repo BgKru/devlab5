@@ -1,0 +1,27 @@
+name: Build and Delivery
+on:
+  workflow_run :
+    workflows : ["Test Python app"]
+    types : [completed]
+    branches :
+    - ’master’
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+      python-version: ’3.12’
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install httpx pytest
+    - name: Run Tests
+      run: python -m pytest tests/
+
+Задайте правило, при котором рабочий процесс будет запускаться только после
+завершения рабочего процесса Test Python App в ветке main ;
